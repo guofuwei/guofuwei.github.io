@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="HanShan">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://example.com/2023/08/15/iptables与docker网络/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="iptables 与 docker 网络docker 默认网络创建 test1,test2 两个容器，加入 docker0 默认网络1docker run -itd --name test1 alpine  1docker run -itd --name test2 alpine  查看 test1 网络 1docker inspect test1 | jq &amp;#x27;.[].NetworkSe">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iptables与docker网络">
+<meta property="og:url" content="http://example.com/2023/08/15/iptables%E4%B8%8Edocker%E7%BD%91%E7%BB%9C/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="iptables 与 docker 网络docker 默认网络创建 test1,test2 两个容器，加入 docker0 默认网络1docker run -itd --name test1 alpine  1docker run -itd --name test2 alpine  查看 test1 网络 1docker inspect test1 | jq &amp;#x27;.[].NetworkSe">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://hanshansite-1307452666.cos.ap-shanghai.myqcloud.com/site-img/%E6%88%AA%E5%B1%8F2022-10-29%2017.27.13.png">
+<meta property="og:image" content="https://hanshansite-1307452666.cos.ap-shanghai.myqcloud.com/site-img/%E6%88%AA%E5%B1%8F2022-10-29%2019.35.30.png">
+<meta property="og:image" content="https://hanshansite-1307452666.cos.ap-shanghai.myqcloud.com/site-img/%E6%88%AA%E5%B1%8F2022-10-29%2019.36.19.png">
+<meta property="og:image" content="https://hanshansite-1307452666.cos.ap-shanghai.myqcloud.com/site-img/20221029200229.png">
+<meta property="og:image" content="https://hanshansite-1307452666.cos.ap-shanghai.myqcloud.com/site-img/%E6%88%AA%E5%B1%8F2022-10-29%2020.05.30.png">
+<meta property="og:image" content="https://hanshansite-1307452666.cos.ap-shanghai.myqcloud.com/site-img/%E6%88%AA%E5%B1%8F2022-10-29%2020.06.54.png">
+<meta property="og:image" content="https://hanshansite-1307452666.cos.ap-shanghai.myqcloud.com/site-img/%E6%88%AA%E5%B1%8F2022-10-29%2020.07.41.png">
+<meta property="og:image" content="https://hanshansite-1307452666.cos.ap-shanghai.myqcloud.com/site-img/%E6%88%AA%E5%B1%8F2022-10-29%2020.07.47.png">
+<meta property="og:image" content="https://hanshansite-1307452666.cos.ap-shanghai.myqcloud.com/site-img/%E6%88%AA%E5%B1%8F2022-10-29%2020.14.17.png">
+<meta property="og:image" content="https://hanshansite-1307452666.cos.ap-shanghai.myqcloud.com/site-img/%E6%88%AA%E5%B1%8F2022-10-29%2020.26.01.png">
+<meta property="og:image" content="https://hanshansite-1307452666.cos.ap-shanghai.myqcloud.com/site-img/%E6%88%AA%E5%B1%8F2022-10-29%2020.26.13.png">
+<meta property="og:image" content="https://hanshansite-1307452666.cos.ap-shanghai.myqcloud.com/site-img/%E6%88%AA%E5%B1%8F2022-10-29%2020.28.19.png">
+<meta property="og:image" content="https://hanshansite-1307452666.cos.ap-shanghai.myqcloud.com/site-img/%E6%88%AA%E5%B1%8F2022-10-29%2020.30.20.png">
+<meta property="og:image" content="https://hanshansite-1307452666.cos.ap-shanghai.myqcloud.com/site-img/%E6%88%AA%E5%B1%8F2022-10-29%2020.30.57.png">
+<meta property="og:image" content="https://hanshansite-1307452666.cos.ap-shanghai.myqcloud.com/site-img/%E6%88%AA%E5%B1%8F2022-10-29%2020.33.49.png">
+<meta property="og:image" content="https://hanshansite-1307452666.cos.ap-shanghai.myqcloud.com/site-img/%E6%88%AA%E5%B1%8F2022-10-29%2020.34.03.png">
+<meta property="article:published_time" content="2023-08-15T17:03:26.907Z">
+<meta property="article:modified_time" content="2023-08-15T17:03:26.907Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://hanshansite-1307452666.cos.ap-shanghai.myqcloud.com/site-img/%E6%88%AA%E5%B1%8F2022-10-29%2017.27.13.png">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/favicon.ico" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/favicon.ico">
+    <!--- Page Info-->
+    
+    <title>
+        
+            iptables与docker网络 -
+        
+        HanShan Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<link rel="stylesheet" href="/fonts/fonts.css">
+
+    
+<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    <!--- Inject Part-->
+    
+    <script id="hexo-configurations">
+    let Global = window.Global || {};
+    Global.hexo_config = {"hostname":"example.com","root":"/","language":"en"};
+    Global.theme_config = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":true,"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":true,"percentage":true},"website_counter":{"url":"https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"open_graph":true,"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"HanShan Blog","subtitle":{"text":[],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.3.0","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"links":null},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2022/8/17 11:45:14"};
+    Global.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    Global.data_config = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+        <span class="scroll-progress-bar"></span>
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="swup-progress-icon">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container" id="swup">
+    
+
+    
+
+    <div class="main-content-container">
+        
+
+        <div class="main-content-header">
+            <header class="navbar-container">
+    
+    <div class="navbar-content">
+        <div class="left">
+            
+                <a class="logo-image" href="/">
+                    <img src="/images/avatar.jpg">
+                </a>
+            
+            <a class="logo-title" href="/">
+                
+                HanShan Blog
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    href="/"  >
+                                    
+                                        
+                                            <i class="fa-regular fa-house"></i>
+                                        
+                                        HOME
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div class="navbar-drawer">
+        <ul class="drawer-navbar-list">
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        href="/"  >
+                             
+                                
+                                    <i class="fa-regular fa-house"></i>
+                                
+                                HOME
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="post-page-container">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            
+                <h1 class="article-title-regular">iptables与docker网络</h1>
+            
+            </div>
+            
+                    
+        
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="/images/avatar.jpg">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">HanShan</span>
+                        
+                            <span class="author-label">Lv1</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2023-08-15 17:03:26</span>
+        <span class="mobile">2023-08-15 17:03:26</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2023-08-15 17:03:26</span>
+            <span class="mobile">2023-08-15 17:03:26</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        <div class="article-content markdown-body">
+            <h1 id="iptables-与-docker-网络"><a href="#iptables-与-docker-网络" class="headerlink" title="iptables 与 docker 网络"></a>iptables 与 docker 网络</h1><h2 id="docker-默认网络"><a href="#docker-默认网络" class="headerlink" title="docker 默认网络"></a>docker 默认网络</h2><h4 id="创建-test1-test2-两个容器，加入-docker0-默认网络"><a href="#创建-test1-test2-两个容器，加入-docker0-默认网络" class="headerlink" title="创建 test1,test2 两个容器，加入 docker0 默认网络"></a>创建 test1,test2 两个容器，加入 docker0 默认网络</h4><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -itd --name test1 alpine</span><br></pre></td></tr></table></figure></div>
+
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -itd --name test2 alpine</span><br></pre></td></tr></table></figure></div>
+
+<p>查看 test1 网络</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker inspect test1 | jq &#x27;.[].NetworkSettings.Networks&#x27;</span><br></pre></td></tr></table></figure></div>
+
+<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://hanshansite-1307452666.cos.ap-shanghai.myqcloud.com/site-img/截屏2022-10-29 17.27.13.png"
+                     
+                >
+
+<p>默认网关是 172.17.0.1</p>
+<p>同时这个 172.17.0.2 的 ip 不是和 test1 绑定的，并且不能通过<code>--ip</code>来绑定 ip 地址，也不能通过容器名来相互 ping 通</p>
+<h2 id="docker-自定义网络"><a href="#docker-自定义网络" class="headerlink" title="docker 自定义网络"></a>docker 自定义网络</h2><h4 id="创建自定义网络"><a href="#创建自定义网络" class="headerlink" title="创建自定义网络"></a>创建自定义网络</h4><div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker network create test_web -d bridge -o com.docker.network.bridge.name=test_web --subnet=&quot;172.18.0.0/16&quot; --gateway=&quot;172.18.0.1&quot;</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="创建-test3，test4-容器加入网络"><a href="#创建-test3，test4-容器加入网络" class="headerlink" title="创建 test3，test4 容器加入网络"></a>创建 test3，test4 容器加入网络</h4><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -itd --name test3 --network test_web alpine</span><br></pre></td></tr></table></figure></div>
+
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -itd --name test4 --network test_web alpine</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="现在有四个网络"><a href="#现在有四个网络" class="headerlink" title="现在有四个网络"></a>现在有四个网络</h4><div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker ps</span><br></pre></td></tr></table></figure></div>
+
+<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://hanshansite-1307452666.cos.ap-shanghai.myqcloud.com/site-img/截屏2022-10-29 19.35.30.png"
+                     
+                >
+
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brctl show</span><br></pre></td></tr></table></figure></div>
+
+<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://hanshansite-1307452666.cos.ap-shanghai.myqcloud.com/site-img/截屏2022-10-29 19.36.19.png"
+                     
+                >
+
+<h4 id="测试容器之间的网络互通性"><a href="#测试容器之间的网络互通性" class="headerlink" title="测试容器之间的网络互通性"></a>测试容器之间的网络互通性</h4><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">test1可以ping通test2</span></span><br><span class="line">docker exec -it test1 ping 172.17.0.3</span><br></pre></td></tr></table></figure></div>
+
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">test3可以ping通test4</span></span><br><span class="line">docker exec -it test3 ping test4</span><br></pre></td></tr></table></figure></div>
+
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">test1不能ping通test3</span></span><br><span class="line">docker exec -it test1 ping 172.18.0.2</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="iptables-完成-docker-网络之间的隔离性"><a href="#iptables-完成-docker-网络之间的隔离性" class="headerlink" title="iptables 完成 docker 网络之间的隔离性"></a>iptables 完成 docker 网络之间的隔离性</h2><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://hanshansite-1307452666.cos.ap-shanghai.myqcloud.com/site-img/20221029200229.png"
+                     
+                >
+
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo iptables -t filter -nxvL</span><br></pre></td></tr></table></figure></div>
+
+<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://hanshansite-1307452666.cos.ap-shanghai.myqcloud.com/site-img/截屏2022-10-29 20.05.30.png"
+                     
+                >
+
+<p>所有的 FORWARD 链都必须先经过 DOCKER-USER，默认 DOCKER-USER 直接返回</p>
+<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://hanshansite-1307452666.cos.ap-shanghai.myqcloud.com/site-img/截屏2022-10-29 20.06.54.png"
+                     
+                >
+
+<p>再经过 DOCKER-ISOLATION-STAGE-1</p>
+<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://hanshansite-1307452666.cos.ap-shanghai.myqcloud.com/site-img/截屏2022-10-29 20.07.41.png"
+                     
+                >
+
+<p>在 DOCKER-ISOLATION-STAGE-1 链中，所有从<strong>test_net 发往 test_net 以外的网卡，从 docker0 发往 docker0 以外的网卡</strong> 都经过 DOCKER-ISOLATION-STAGE-2</p>
+<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://hanshansite-1307452666.cos.ap-shanghai.myqcloud.com/site-img/截屏2022-10-29 20.07.47.png"
+                     
+                >
+
+<p>DOCKER-ISOLATION-STAGE-2 直接将发往 test_net 和 docker0 的包 DROP,完成容器隔离</p>
+<p><strong>注意：docker 必须开启 ip_forward，如果关闭，docker 容器将无法上网</strong></p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo sysctl -w net.ipv4.ip_forward=0 # 关闭ip_forward</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="iptables-完成-docker-容器的动态地址转换"><a href="#iptables-完成-docker-容器的动态地址转换" class="headerlink" title="iptables 完成 docker 容器的动态地址转换"></a>iptables 完成 docker 容器的动态地址转换</h2><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo iptables -t nat -nvxL</span><br></pre></td></tr></table></figure></div>
+
+<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://hanshansite-1307452666.cos.ap-shanghai.myqcloud.com/site-img/截屏2022-10-29 20.14.17.png"
+                     
+                >
+
+<p>将从 docker 容器的发出的网络请求进行 MASQUERADE（动态 SNAT）</p>
+<p><strong>注意：不需要对返回的包进行 DNAT，iptables 有 conntrack 连接追踪功能</strong></p>
+<p>例如 <code>Container A</code> 通过 bridge 网络向 baidu.com 发起了 N 个连接，这时数据的处理流程如下：</p>
+<ul>
+<li>例如 Container A 发出的数据包被 MASQUERADE 规则处理，将 src ip 替换成 eth0 的 ip，然后发送到物理网络 192.168.31.0&#x2F;24。</li>
+</ul>
+<ul>
+<li><p>conntrack 系统记录此连接被 NAT 处理前后的状态信息，并将其状态设置为 NEW，表示这是新发起的一个连接</p>
+</li>
+<li><p>对端 baidu.com 返回数据包后，会首先到达 eth0 网卡</p>
+</li>
+<li><p>conntrack 查表，发现返回数据包的连接已经记录在表中并且状态为 NEW，于是它将连接的状态修改为 ESTABLISHED，并且将 dst_ip 改为 172.17.0.2 然后发送出去（注意，这个和 tcp 的 ESTABLISHED 没任何关系）</p>
+</li>
+<li><p>经过路由匹配，数据包会进入到 docker0，然后匹配上 iptables 规则：<code>-t filter -A FORWARD -o docker0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT</code>，数据直接被放行，数据经过 veth 后，最终进入到 <code>Container A</code> 中，交由容器的内核协议栈处理。</p>
+</li>
+<li><p>数据被 <code>Container A</code> 的内核协议栈发送到「发起连接的应用程序」。</p>
+</li>
+</ul>
+<h2 id="iptables-和-docker-proxy-共同完成容器端口映射"><a href="#iptables-和-docker-proxy-共同完成容器端口映射" class="headerlink" title="iptables 和 docker-proxy 共同完成容器端口映射"></a>iptables 和 docker-proxy 共同完成容器端口映射</h2><h4 id="先起一个-nginx-容器"><a href="#先起一个-nginx-容器" class="headerlink" title="先起一个 nginx 容器"></a>先起一个 nginx 容器</h4><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --name nginx-demo -itd --network test_net --ip 172.18.0.66 -p 8080:80 nginx:latest</span><br></pre></td></tr></table></figure></div>
+
+<h4 id="查看-iptables"><a href="#查看-iptables" class="headerlink" title="查看 iptables"></a>查看 iptables</h4><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo iptables -t nat -nxvL</span><br></pre></td></tr></table></figure></div>
+
+<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://hanshansite-1307452666.cos.ap-shanghai.myqcloud.com/site-img/截屏2022-10-29 20.26.01.png"
+                     
+                >
+
+<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://hanshansite-1307452666.cos.ap-shanghai.myqcloud.com/site-img/截屏2022-10-29 20.26.13.png"
+                     
+                >
+
+<p>iptables 对发往 172.18.0.66 的端口进行了 DNAT</p>
+<h4 id="docker-proxy-的存在"><a href="#docker-proxy-的存在" class="headerlink" title="docker-proxy 的存在"></a>docker-proxy 的存在</h4><div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps -aux | grep &#x27;docker-proxy&#x27;</span><br></pre></td></tr></table></figure></div>
+
+<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://hanshansite-1307452666.cos.ap-shanghai.myqcloud.com/site-img/截屏2022-10-29 20.28.19.png"
+                     
+                >
+
+<p>当我们绕开 iptables 的 DNAT 规则时</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo iptables -t nat -I DOCKER 1 -p tcp -j RETURN</span><br></pre></td></tr></table></figure></div>
+
+<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://hanshansite-1307452666.cos.ap-shanghai.myqcloud.com/site-img/截屏2022-10-29 20.30.20.png"
+                     
+                >
+
+<p>依然可以正常访问</p>
+<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://hanshansite-1307452666.cos.ap-shanghai.myqcloud.com/site-img/截屏2022-10-29 20.30.57.png"
+                     
+                >
+
+<p>杀掉 docker-proxy 进程</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pkill docker-proxy</span><br></pre></td></tr></table></figure></div>
+
+<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://hanshansite-1307452666.cos.ap-shanghai.myqcloud.com/site-img/截屏2022-10-29 20.33.49.png"
+                     
+                >
+
+<p>无法正常访问</p>
+<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://hanshansite-1307452666.cos.ap-shanghai.myqcloud.com/site-img/截屏2022-10-29 20.34.03.png"
+                     
+                >
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
+<li>docker 安装后会自动开启 ip_forward，默认桥接网络是 docker0</li>
+<li>docker 会在 filter 表 FORWARD 链中加入 DOCKER-USER，DOCKER-ISOLATION-STAGE-1,DOCKER-ISOLATION-STAGE-2，通过 DOCKER-ISOLATION-STAGE-1，DOCKER-ISOLATION-STAGE-2 完成容器之间的隔离</li>
+<li>每新建一个 docker network，docker 会在 nat 表 POSTROUTING 链中加入该网络的动态 SNAT（MASQUERADE），同时利用 conntrack 完成回应包的自动地址转换</li>
+<li>docker 容器和宿主机之间的端口映射是 iptables 和 docker-proxy 共同完成的。iptables 会在 nat 表的 PREROUTING 中自定义 DOCKER 链中加入 DNAT。docker-proxy 会为每个容器开启。</li>
+</ol>
+
+        </div>
+
+        
+            <div class="post-copyright-info">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> iptables与docker网络</li>
+        <li><strong>Author:</strong> HanShan</li>
+        <li><strong>Created at:</strong> 2023-08-15 17:03:26</li>
+        
+            <li>
+                <strong>Updated at:</strong> 2023-08-15 17:03:26
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://guofuwei.github.io/2023/08/15/iptables与docker网络/
+        </li>
+        <li>
+            <strong>License:</strong> This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a>.
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+
+        
+
+        
+            <div class="article-nav">
+                
+                    <div class="article-prev">
+                        <a class="prev"
+                        rel="prev"
+                        href="/2023/08/15/hello-world/"
+                        >
+                            <span class="left arrow-icon flex-center">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">Hello World</span>
+                                <span class="post-nav-item">Prev posts</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next">
+                        <a class="next"
+                        rel="next"
+                        href="/2023/08/15/%E7%A1%AC%E8%B7%AF%E7%94%B1Openwrt%E6%8A%98%E8%85%BE%E5%8F%B2/"
+                        >
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">硬路由 OpenWrt 折腾史</span>
+                                <span class="post-nav-item">Next posts</span>
+                            </span>
+                            <span class="right arrow-icon flex-center">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+
+        
+            <div class="comment-container">
+                <div class="comments-container pjax">
+    <div id="comment-anchor"></div>
+    <div class="comment-area-title">
+        <i class="fa-solid fa-comments"></i>&nbsp;Comments
+    </div>
+    
+
+        
+            
+ 
+    <div id="waline"></div>
+    <script type="module"  data-swup-reload-script>
+        import { init } from 'https://evan.beee.top/js/waline.mjs';
+
+        function loadWaline() {
+            init({
+                el: '#waline',
+                serverURL: 'https://example.example.com',
+                lang: 'zh-CN',
+                dark: 'body[class~="dark-mode"]',
+                requiredMeta: ['nick','mail'], // cannot customize by theme config, change it yourself
+            });
+        }
+
+        if ('true') {
+            const loadWalineTimeout = setTimeout(() => {
+                loadWaline();
+                clearTimeout(loadWalineTimeout);
+            }, 1000);
+        } else {
+            window.addEventListener('DOMContentLoaded', loadWaline);
+        }
+        
+    </script>
+
+
+
+        
+    
+</div>
+
+            </div>
+        
+    </div>
+
+    
+        <div class="toc-content-container">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">On this page</div>
+        <div class="page-title">iptables与docker网络</div>
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#iptables-%E4%B8%8E-docker-%E7%BD%91%E7%BB%9C"><span class="nav-text">iptables 与 docker 网络</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-%E9%BB%98%E8%AE%A4%E7%BD%91%E7%BB%9C"><span class="nav-text">docker 默认网络</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker-%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BD%91%E7%BB%9C"><span class="nav-text">docker 自定义网络</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#iptables-%E5%AE%8C%E6%88%90-docker-%E7%BD%91%E7%BB%9C%E4%B9%8B%E9%97%B4%E7%9A%84%E9%9A%94%E7%A6%BB%E6%80%A7"><span class="nav-text">iptables 完成 docker 网络之间的隔离性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#iptables-%E5%AE%8C%E6%88%90-docker-%E5%AE%B9%E5%99%A8%E7%9A%84%E5%8A%A8%E6%80%81%E5%9C%B0%E5%9D%80%E8%BD%AC%E6%8D%A2"><span class="nav-text">iptables 完成 docker 容器的动态地址转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#iptables-%E5%92%8C-docker-proxy-%E5%85%B1%E5%90%8C%E5%AE%8C%E6%88%90%E5%AE%B9%E5%99%A8%E7%AB%AF%E5%8F%A3%E6%98%A0%E5%B0%84"><span class="nav-text">iptables 和 docker-proxy 共同完成容器端口映射</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol></li></ol>
+
+    </div>
+</div>
+        </div>
+    
+</div>
+
+
+
+                
+
+            </div>
+            
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info">
+            &copy;
+            
+              <span>2022</span>
+              -
+            
+            2023&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">HanShan</a>
+        </div>
+        
+            <script data-swup-reload-script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv" class="busuanzi_container_site_uv">
+                        VISITOR COUNT&nbsp;<span id="busuanzi_value_site_uv" class="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="busuanzi_container_site_pv">
+                        TOTAL PAGE VIEWS&nbsp;<span id="busuanzi_value_site_pv" class="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            <span class="powered-by-container">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" href="https://hexo.io">Hexo</a></span>
+                <br>
+            <span class="theme-version-container">THEME&nbsp;<a class="theme-version" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.3.0</a></span>
+        </div>
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="go-comment">
+                <i class="fa-regular fa-comments"></i>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-expand-width flex-center">
+            <i class="fa-regular fa-expand"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+
+</main>
+
+
+<script src="/js/libs/Swup.min.js"></script>
+
+<script src="/js/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/libs/SwupScrollPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+        ],
+        containers: ["#swup"],
+    });
+
+    swup.on("pageView", () => {
+        Global.refresh();
+    });
+
+    // if (document.readyState === "complete") {
+    //
+    // } else {
+    //     document.addEventListener("DOMContentLoaded", () => init());
+    // }
+</script>
+
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/layouts/navbarShrink.js"></script>
+
+<script src="/js/tools/scrollTopBottom.js"></script>
+
+<script src="/js/tools/lightDarkSwitch.js"></script>
+
+<script src="/js/layouts/categoryList.js"></script>
+
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js"></script>
+
+
+
+
+    
+<script src="/js/tools/runtime.js"></script>
+
+    
+<script src="/js/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts" data-swup-reload-script>
+    
+        
+<script src="/js/tools/tocToggle.js"></script>
+
+<script src="/js/layouts/toc.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+<script src="/js/plugins/tabs.js"></script>
+
+    
+</div>
+
+
+</body>
+</html>

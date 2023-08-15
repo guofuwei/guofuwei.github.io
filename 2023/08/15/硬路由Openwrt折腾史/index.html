@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="HanShan">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://example.com/2023/08/15/硬路由openwrt折腾史/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="硬路由 OpenWrt 折腾史前言 什么是 OpenWrt?  借用官网的一句话，OpenWrt 项目是一个针对嵌入式设备的 Linux 操作系统。在本次的介绍中，我们将 OpenWrt 安装到路由器上，让路由器发挥更强大的功能  为什么用折腾？  一般家里面的路由器基本上就一个功能：上网。但是路由器作为家里所有联网设备与外部的 Internet 交互的网关，应该可以发挥更强大的功能。OpenWr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="硬路由 OpenWrt 折腾史">
+<meta property="og:url" content="http://example.com/2023/08/15/%E7%A1%AC%E8%B7%AF%E7%94%B1Openwrt%E6%8A%98%E8%85%BE%E5%8F%B2/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="硬路由 OpenWrt 折腾史前言 什么是 OpenWrt?  借用官网的一句话，OpenWrt 项目是一个针对嵌入式设备的 Linux 操作系统。在本次的介绍中，我们将 OpenWrt 安装到路由器上，让路由器发挥更强大的功能  为什么用折腾？  一般家里面的路由器基本上就一个功能：上网。但是路由器作为家里所有联网设备与外部的 Internet 交互的网关，应该可以发挥更强大的功能。OpenWr">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://hanshansite-1307452666.cos.ap-shanghai.myqcloud.com/site-img/Screen%20Shot%202023-04-14%20at%2017.18.07.png">
+<meta property="og:image" content="https://hanshansite-1307452666.cos.ap-shanghai.myqcloud.com/site-img/Screen%20Shot%202023-04-14%20at%2017.24.04.png">
+<meta property="article:published_time" content="2023-08-15T17:03:26.907Z">
+<meta property="article:modified_time" content="2023-08-15T17:03:26.907Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://hanshansite-1307452666.cos.ap-shanghai.myqcloud.com/site-img/Screen%20Shot%202023-04-14%20at%2017.18.07.png">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/favicon.ico" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/favicon.ico">
+    <!--- Page Info-->
+    
+    <title>
+        
+            硬路由 OpenWrt 折腾史 -
+        
+        HanShan Blog
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<link rel="stylesheet" href="/fonts/fonts.css">
+
+    
+<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+    <!--- Inject Part-->
+    
+    <script id="hexo-configurations">
+    let Global = window.Global || {};
+    Global.hexo_config = {"hostname":"example.com","root":"/","language":"en"};
+    Global.theme_config = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":true,"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":true,"percentage":true},"website_counter":{"url":"https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"open_graph":true,"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"HanShan Blog","subtitle":{"text":[],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"links":{"github":null,"instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.3.0","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"links":null},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2022/8/17 11:45:14"};
+    Global.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    Global.data_config = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+        <span class="scroll-progress-bar"></span>
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+        <span class="swup-progress-icon">
+            <i class="fa-solid fa-circle-notch fa-spin"></i>
+        </span>
+    
+</div>
+
+
+<main class="page-container" id="swup">
+    
+
+    
+
+    <div class="main-content-container">
+        
+
+        <div class="main-content-header">
+            <header class="navbar-container">
+    
+    <div class="navbar-content">
+        <div class="left">
+            
+                <a class="logo-image" href="/">
+                    <img src="/images/avatar.jpg">
+                </a>
+            
+            <a class="logo-title" href="/">
+                
+                HanShan Blog
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="" 
+                                    href="/"  >
+                                    
+                                        
+                                            <i class="fa-regular fa-house"></i>
+                                        
+                                        HOME
+                                    
+                                </a>
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div class="navbar-drawer">
+        <ul class="drawer-navbar-list">
+            
+                
+                    <li class="drawer-navbar-item flex-center">
+                        <a class="" 
+                        href="/"  >
+                             
+                                
+                                    <i class="fa-regular fa-house"></i>
+                                
+                                HOME
+                            
+                        </a>
+                    </li>
+                    <!-- Submenu -->
+                    
+            
+
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="post-page-container">
+    <div class="article-content-container">
+
+        <div class="article-title">
+            
+                <h1 class="article-title-regular">硬路由 OpenWrt 折腾史</h1>
+            
+            </div>
+            
+                    
+        
+        
+            <div class="article-header">
+                <div class="avatar">
+                    <img src="/images/avatar.jpg">
+                </div>
+                <div class="info">
+                    <div class="author">
+                        <span class="name">HanShan</span>
+                        
+                            <span class="author-label">Lv1</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2023-08-15 17:03:26</span>
+        <span class="mobile">2023-08-15 17:03:26</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2023-08-15 17:03:26</span>
+            <span class="mobile">2023-08-15 17:03:26</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        <div class="article-content markdown-body">
+            <h1 id="硬路由-OpenWrt-折腾史"><a href="#硬路由-OpenWrt-折腾史" class="headerlink" title="硬路由 OpenWrt 折腾史"></a>硬路由 OpenWrt 折腾史</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><ol>
+<li>什么是 OpenWrt?</li>
+</ol>
+<p>借用官网的一句话，OpenWrt 项目是一个针对嵌入式设备的 Linux 操作系统。在本次的介绍中，我们将 OpenWrt 安装到路由器上，让路由器发挥更强大的功能</p>
+<ol start="2">
+<li>为什么用折腾？</li>
+</ol>
+<p>一般家里面的路由器基本上就一个功能：上网。但是路由器作为家里所有联网设备与外部的 Internet 交互的网关，应该可以发挥更强大的功能。OpenWrt 是一个开源的 Linux 发行版，感谢开源的强大力量，我们可以运行很多好玩的程序在上面。比如：科学上网，内网穿透，广告过滤，KMS 激活服务器，开启 VPN 通道……</p>
+<h2 id="正式开始折腾"><a href="#正式开始折腾" class="headerlink" title="正式开始折腾"></a>正式开始折腾</h2><h3 id="第一步-☝️：选择路由器"><a href="#第一步-☝️：选择路由器" class="headerlink" title="第一步 ☝️：选择路由器"></a>第一步 ☝️：选择路由器</h3><p>现在并不是所有的路由器都是支持 OpenWrt 的，可以在 OpenWrt 的官网查看是否支持你的机器<a class="link"   target="_blank" rel="noopener" href="https://firmware-selector.openwrt.org/" >OpenWrt Firmware Selector <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p>当然也有的路由器原生就是 OpenWrt 系统，比如下面这个：</p>
+<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://hanshansite-1307452666.cos.ap-shanghai.myqcloud.com/site-img/Screen%20Shot%202023-04-14%20at%2017.18.07.png"
+                      alt="Screen Shot 2023-04-14 at 17.18.07" 
+                >
+
+<p>这样一个路由器也只支持 wifi5，有点太贵了（流下了贫穷的眼泪），为了追求极致的性价比（省钱），我决定自己找一款支持 OpenWrt 的路由器，同时也不是很贵</p>
+<p>于是我找到了下面这款 👇</p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://hanshansite-1307452666.cos.ap-shanghai.myqcloud.com/site-img/Screen%20Shot%202023-04-14%20at%2017.24.04.png"
+                      alt="Screen Shot 2023-04-14 at 17.24.04"
+                ></p>
+<p>只要 165 的价格！128MB 超大内存（对路由器来说确实很大）！支持 OpenWrt！年轻人的第一台路由器！</p>
+<h3 id="第二步-✌️：如何安装-OpenWrt-呢"><a href="#第二步-✌️：如何安装-OpenWrt-呢" class="headerlink" title="第二步 ✌️：如何安装 OpenWrt 呢"></a>第二步 ✌️：如何安装 OpenWrt 呢</h3><p>一般情况下来说，路由器本身的固件是不会给你一个接口把它换掉了，<del>难道要用烧录器直接对着芯片烧录</del></p>
+<p>但是事情在 Redmi AC2100 上还是有点希望的，Redmi AC2100 这个路由器有些版本固件出现了 bug（<del>可能是故意的</del>）我们可以通过一个 http 请求来开启固件的 ssh 登陆（看来 redmi 官方的固件也是基于 linux 的）<br>下面是具体步骤：</p>
+<ol>
+<li><p>刷入制定版本固件：首先我们要检查一下当前的固件版本有没有 bug，这边我建议直接刷入 2.0.23 版本的固件，我们使用<a class="link"   target="_blank" rel="noopener" href="http://bigota.miwifi.com/xiaoqiang/tools/MIWIFIRepairTool.x86.zip" >小米路由修复工具 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a> 更新&#x2F;降级固件版本至 <a class="link"   target="_blank" rel="noopener" href="http://cdn.cnbj1.fds.api.mi-img.com/xiaoqiang/rom/rm2100/miwifi_rm2100_all_fb720_2.0.23.bin" >2.0.23 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>。</p>
+</li>
+<li><p>查看你的<strong>STOK</strong>：使用浏览器打开你的路由登录界面，登录。复制地址栏的地址，我们需要地址里面的 stok 参数。参数如下所示，下文中的所有 <strong>[STOK]</strong> 字符串均指代这一 stok 参数，**[router-ip]**均代表路由器的地址，一般是 192.168.31.1</p>
+</li>
+</ol>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[router-ip]/cgi-bin/luci/;stok=[STOK]/web/home#router</span><br></pre></td></tr></table></figure></div>
+
+<ol start="3">
+<li>启用 SSH 服务器：复制下面的这一行地址到浏览器的地址栏，替换 stok 参数并访问。</li>
+</ol>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[router-ip]/cgi-bin/luci/;stok=[STOK]/api/misystem/set_config_iotdev?bssid=Xiaomi&amp;user_id=longdike&amp;ssid=-h%3B%20nvram%20set%20ssh_en%3D1%3B%20nvram%20commit%3B%20sed%20-i%20&#x27;s%2Fchannel%3D.*%2Fchannel%3D%5C%22debug%5C%22%2Fg&#x27;%20%2Fetc%2Finit.d%2Fdropbear%3B%20%2Fetc%2Finit.d%2Fdropbear%20start%3B</span><br></pre></td></tr></table></figure></div>
+
+<ol start="4">
+<li>修改 root 密码：复制下面的这一行地址到浏览器的地址栏，替换 stok 参数并访问。</li>
+</ol>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://[router-ip]/cgi-bin/luci/;stok=[STOK]/api/misystem/set_config_iotdev?bssid=gallifrey&amp;user_id=doctor&amp;ssid=-h%0Aecho%20-e%20%27password%5Cnpassword%27%20%7C%20passwd%20root%0A</span><br></pre></td></tr></table></figure></div>
+
+<p>此命令执行完毕后，会将你的路由器的 root 用户密码修改为 <code>password</code></p>
+<p>执行完毕后，你已经可以通过 ssh 访问路由器了。既然我们可以 ssh 到路由器而且有 root 权限，那离成功只有一步之遥</p>
+<ol start="5">
+<li>选择你想要刷入的固件：</li>
+</ol>
+<ul>
+<li><p>官方固件<a class="link"   target="_blank" rel="noopener" href="https://downloads.openwrt.org/releases/22.03.4/targets/ramips/mt7621/" >Index of &#x2F;releases&#x2F;22.03.4&#x2F;targets&#x2F;ramips&#x2F;mt7621&#x2F; (openwrt.org) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>找到下面这个文件</p>
+<ul>
+<li>xiaomi_redmi-router-ac2100-initramfs-kernel.bin</li>
+<li>xiaomi_redmi-router-ac2100-squashfs-kernel1.bin</li>
+<li>xiaomi_redmi-router-ac2100-squashfs-rootfs0.bin</li>
+<li>xiaomi_redmi-router-ac2100-squashfs-sysupgrade.bin</li>
+</ul>
+</li>
+<li><p>第三方固件，可以自己在网上搜索，第三方的固件在官方的固件上安装了一些软件，就不用自己到处搜集资源安装了，功能相比于官方的更加强大，这里可以推荐一个<a class="link"   target="_blank" rel="noopener" href="https://www.right.com.cn/forum/thread-7807773-1-1.html" >【2022-7-15】每日更新 稳定版&#x2F;精简版 红米 小米 AC2100 Openwrt 固件 (提供定制)-小米无线路由器以及小米无线相关的设备-恩山无线论坛 - Powered by Discuz! (right.com.cn) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+</li>
+</ul>
+<ol start="6">
+<li>正式刷入固件，这里以官方固件为例。</li>
+</ol>
+<p>首先下载后缀为<code>squashfs-kernel1.bin</code>和<code>squashfs-rootfs0.bin</code>的两个文件，放入路由器中。然后使用下面的命令安装固件：</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">mtd write openwrt-ramips-mt7621-xiaomi_redmi-router-ac2100-squashfs-kernel1.bin kernel1</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">mtd -r write openwrt-ramips-mt7621-xiaomi_redmi-router-ac2100-squashfs-rootfs0.bin rootfs0</span></span><br></pre></td></tr></table></figure></div>
+
+<p>执行完毕后，系统将会自动重启进入 OpenWrt。</p>
+<p>到这里为止，OpenWrt 就安装完成了，是不是很简单！</p>
+<h2 id="校园网的烦恼"><a href="#校园网的烦恼" class="headerlink" title="校园网的烦恼"></a>校园网的烦恼</h2><p>总所周知，华科的校园网是要认证的，当我们兴冲冲地买了路由器，折腾了半天终于安装好 openwrt，发现根本没网！</p>
+<p>别急！</p>
+<p>有一个暂时的解决方案，直接连上路由器的网，打开<a class="link"   target="_blank" rel="noopener" href="http://172.18.18.60:8080/%EF%BC%8C%E7%9B%B4%E6%8E%A5%E5%9C%A8%E6%B5%8F%E8%A7%88%E5%99%A8%E4%B8%AD%E5%83%8F%E5%B9%B3%E6%97%B6%E8%BF%9E%E6%A0%A1%E5%9B%AD%E7%BD%91%E4%B8%80%E6%A0%B7%E9%AA%8C%E8%AF%81%E5%B0%B1%E8%A1%8C" >http://172.18.18.60:8080/，直接在浏览器中像平时连校园网一样验证就行 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p>有没有永久的解决方案呢，每次路由器重启了都要重新连也太麻烦了，特别是学校晚上要断电，那基本每天都要重新连，实在是太麻烦！</p>
+<p>可以想到的是，有没有一个程序帮我们连校园网再加上开机自启动或者定时任务之类的就可以彻底解放了！</p>
+<p>相信我们肯定不是第一个想到这个问题的人，我们的前辈已经在十年前想到了这个问题，于是 mentohust 就诞生了。但是别高兴太早，mentohust 已经很久不更新了，而且 mentohust 可以在 linux 上运行，没错，但是我们是在一个路由器上跑的 openwrt，硬件资源十分的匮乏，只有 128MB+128MB 的规格，没错，储存也只有 128MB！最关键的是这个路由器的<strong>CPU 框架不是 x86 也不是 arm</strong>，所以我们没法直接在 openwrt 上运行 mentohust。</p>
+<p>后来我又在网上找了很久，终于找到了 mentohust 的替代品<strong>minieap</strong>!，而且最重要的我找到了 minieap 的 openwrt 的部署版本，因为 openwrt 是为了嵌入式设备开发的 linux 版本，跑在各种不同架构的 CPU 上，所以大部分软件都不会给直接运行的版本，而是需要从源码开始编译，但是路由器上连 build-essential 这种包都安装不了，更别提编译，所以我们要用到<strong>交叉编译</strong>，在我们正常的 linux 机器上编译路由器上能跑的程序。</p>
+<p>openwrt 官方提供了交叉编译所需要的 sdk<a class="link"   target="_blank" rel="noopener" href="https://downloads.openwrt.org/releases/22.03.4/targets/ramips/mt7621/openwrt-sdk-22.03.4-ramips-mt7621_gcc-11.2.0_musl.Linux-x86_64.tar.xz%EF%BC%8C%E5%90%8C%E6%97%B6%E6%88%91%E4%BB%AC%E4%B9%9F%E6%89%BE%E5%88%B0%E4%BA%86openwrt%E7%9A%84%E4%B8%93%E7%94%A8%E7%9A%84minieap%E7%89%88%E6%9C%AC[ysc3839/openwrt-minieap" >https://downloads.openwrt.org/releases/22.03.4/targets/ramips/mt7621/openwrt-sdk-22.03.4-ramips-mt7621_gcc-11.2.0_musl.Linux-x86_64.tar.xz，同时我们也找到了openwrt的专用的minieap版本[ysc3839/openwrt-minieap <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a> (github.com)](<a class="link"   target="_blank" rel="noopener" href="https://github.com/ysc3839/openwrt-minieap)%EF%BC%8C%E5%A4%A7%E5%8A%9F%E5%91%8A%E6%88%90%EF%BC%8C%E4%B8%8B%E9%9D%A2%E6%98%AF%E5%85%B7%E4%BD%93%E7%9A%84%E6%AD%A5%E9%AA%A4" >https://github.com/ysc3839/openwrt-minieap)，大功告成，下面是具体的步骤 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<ol>
+<li>在 openwrt 下载对应 CPU 架构的 SDK 交叉编译包，如 redmi AC2100 是这个<a class="link"   target="_blank" rel="noopener" href="https://downloads.openwrt.org/releases/22.03.4/targets/ramips/mt7621/openwrt-sdk-22.03.4-ramips-mt7621_gcc-11.2.0_musl.Linux-x86_64.tar.xz" >https://downloads.openwrt.org/releases/22.03.4/targets/ramips/mt7621/openwrt-sdk-22.03.4-ramips-mt7621_gcc-11.2.0_musl.Linux-x86_64.tar.xz <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+<li>到<a class="link"   target="_blank" rel="noopener" href="https://github.com/ysc3839/openwrt-minieap" >ysc3839&#x2F;openwrt-minieap (github.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>这个仓库下面，按照 README 的步骤，完成交叉编译</li>
+<li>生成可执行文件，将其上传到路由器上</li>
+</ol>
+<p>校园网用的是锐捷验证，我的 minieap 执行参数如下：</p>
+<div class="highlight-container" data-rel="Shell"><figure class="iseeu highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">minieap -u [studentid] -p [password] -n eth1 --module rjv3 -a 1 -d 2 -b 3</span></span><br></pre></td></tr></table></figure></div>
+
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><ol>
+<li>路由器在插网线的时候记得插的是 LAN 口还是 WAN 口。</li>
+<li>在用路由器科学上网后，可能会出现双层代理的问题，但是可以提供一个无感的科学上网体验，比如 switch 就可以直连外网。</li>
+<li>路由器的端口转发功能上十分实用，整个校园网就是一个大内网，将寝室的机器转发到校园网内网后就可以在校园任何地方连接寝室的服务器或者电脑。</li>
+<li>硬路由的性能还是有限的，而且可能会变成砖头 🧱，建议直接折腾软路由</li>
+</ol>
+<p>参考链接 🔗</p>
+<p>[<a class="link"   target="_blank" rel="noopener" href="https://openwrt.org/" >OpenWrt Wiki] Welcome to the OpenWrt Project <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.lotlab.org/2021/06/13/install-openwrt-on-redmi-ac2100/" >红米 AC2100 路由器刷 OpenWrt 教程 – LotLab <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.right.com.cn/forum/thread-7807773-1-1.html" >【2022-7-15】每日更新 稳定版&#x2F;精简版 红米 小米 AC2100 Openwrt 固件 (提供定制)-小米无线路由器以及小米无线相关的设备-恩山无线论坛 - Powered by Discuz! (right.com.cn) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://github.com/ysc3839/openwrt-minieap" >ysc3839&#x2F;openwrt-minieap (github.com) <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+
+        </div>
+
+        
+            <div class="post-copyright-info">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>Title:</strong> 硬路由 OpenWrt 折腾史</li>
+        <li><strong>Author:</strong> HanShan</li>
+        <li><strong>Created at:</strong> 2023-08-15 17:03:26</li>
+        
+            <li>
+                <strong>Updated at:</strong> 2023-08-15 17:03:26
+            </li>
+        
+        <li>
+            <strong>Link:</strong> https://guofuwei.github.io/2023/08/15/硬路由Openwrt折腾史/
+        </li>
+        <li>
+            <strong>License:</strong> This work is licensed under <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">CC BY-NC-SA 4.0</a>.
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+
+        
+
+        
+            <div class="article-nav">
+                
+                    <div class="article-prev">
+                        <a class="prev"
+                        rel="prev"
+                        href="/2023/08/15/iptables%E4%B8%8Edocker%E7%BD%91%E7%BB%9C/"
+                        >
+                            <span class="left arrow-icon flex-center">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex-center">
+                                <span class="post-nav-title-item">iptables与docker网络</span>
+                                <span class="post-nav-item">Prev posts</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+            </div>
+        
+
+
+        
+            <div class="comment-container">
+                <div class="comments-container pjax">
+    <div id="comment-anchor"></div>
+    <div class="comment-area-title">
+        <i class="fa-solid fa-comments"></i>&nbsp;Comments
+    </div>
+    
+
+        
+            
+ 
+    <div id="waline"></div>
+    <script type="module"  data-swup-reload-script>
+        import { init } from 'https://evan.beee.top/js/waline.mjs';
+
+        function loadWaline() {
+            init({
+                el: '#waline',
+                serverURL: 'https://example.example.com',
+                lang: 'zh-CN',
+                dark: 'body[class~="dark-mode"]',
+                requiredMeta: ['nick','mail'], // cannot customize by theme config, change it yourself
+            });
+        }
+
+        if ('true') {
+            const loadWalineTimeout = setTimeout(() => {
+                loadWaline();
+                clearTimeout(loadWalineTimeout);
+            }, 1000);
+        } else {
+            window.addEventListener('DOMContentLoaded', loadWaline);
+        }
+        
+    </script>
+
+
+
+        
+    
+</div>
+
+            </div>
+        
+    </div>
+
+    
+        <div class="toc-content-container">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">On this page</div>
+        <div class="page-title">硬路由 OpenWrt 折腾史</div>
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A1%AC%E8%B7%AF%E7%94%B1-OpenWrt-%E6%8A%98%E8%85%BE%E5%8F%B2"><span class="nav-text">硬路由 OpenWrt 折腾史</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A3%E5%BC%8F%E5%BC%80%E5%A7%8B%E6%8A%98%E8%85%BE"><span class="nav-text">正式开始折腾</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5-%E2%98%9D%EF%B8%8F%EF%BC%9A%E9%80%89%E6%8B%A9%E8%B7%AF%E7%94%B1%E5%99%A8"><span class="nav-text">第一步 ☝️：选择路由器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5-%E2%9C%8C%EF%B8%8F%EF%BC%9A%E5%A6%82%E4%BD%95%E5%AE%89%E8%A3%85-OpenWrt-%E5%91%A2"><span class="nav-text">第二步 ✌️：如何安装 OpenWrt 呢</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%A1%E5%9B%AD%E7%BD%91%E7%9A%84%E7%83%A6%E6%81%BC"><span class="nav-text">校园网的烦恼</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%8E%E8%AE%B0"><span class="nav-text">后记</span></a></li></ol></li></ol>
+
+    </div>
+</div>
+        </div>
+    
+</div>
+
+
+
+                
+
+            </div>
+            
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer">
+    <div class="info-container">
+        <div class="copyright-info">
+            &copy;
+            
+              <span>2022</span>
+              -
+            
+            2023&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">HanShan</a>
+        </div>
+        
+            <script data-swup-reload-script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+            <div class="website-count info-item">
+                
+                    <span id="busuanzi_container_site_uv" class="busuanzi_container_site_uv">
+                        VISITOR COUNT&nbsp;<span id="busuanzi_value_site_uv" class="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="busuanzi_container_site_pv">
+                        TOTAL PAGE VIEWS&nbsp;<span id="busuanzi_value_site_pv" class="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="theme-info info-item">
+            <span class="powered-by-container">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" href="https://hexo.io">Hexo</a></span>
+                <br>
+            <span class="theme-version-container">THEME&nbsp;<a class="theme-version" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.3.0</a></span>
+        </div>
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="go-comment">
+                <i class="fa-regular fa-comments"></i>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-expand-width flex-center">
+            <i class="fa-regular fa-expand"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+
+</main>
+
+
+<script src="/js/libs/Swup.min.js"></script>
+
+<script src="/js/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/libs/SwupScrollPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+        ],
+        containers: ["#swup"],
+    });
+
+    swup.on("pageView", () => {
+        Global.refresh();
+    });
+
+    // if (document.readyState === "complete") {
+    //
+    // } else {
+    //     document.addEventListener("DOMContentLoaded", () => init());
+    // }
+</script>
+
+
+
+
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/main.js"></script>
+
+<script src="/js/layouts/navbarShrink.js"></script>
+
+<script src="/js/tools/scrollTopBottom.js"></script>
+
+<script src="/js/tools/lightDarkSwitch.js"></script>
+
+<script src="/js/layouts/categoryList.js"></script>
+
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js"></script>
+
+
+
+
+    
+<script src="/js/tools/runtime.js"></script>
+
+    
+<script src="/js/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js"></script>
+
+
+
+
+
+
+
+<div class="post-scripts" data-swup-reload-script>
+    
+        
+<script src="/js/tools/tocToggle.js"></script>
+
+<script src="/js/layouts/toc.js"></script>
+
+<script src="/js/libs/anime.min.js"></script>
+
+<script src="/js/plugins/tabs.js"></script>
+
+    
+</div>
+
+
+</body>
+</html>
