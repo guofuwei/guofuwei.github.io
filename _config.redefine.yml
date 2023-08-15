@@ -19,11 +19,11 @@ info:
 # IMAGE CONFIGURATION >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> start
 defaults:
   # Favicon
-  favicon: /images/favicon.ico
+  favicon: https://hanshansite-1307452666.cos.ap-shanghai.myqcloud.com/site-img/favicon.ico
   # Site logo
-  logo: /images/avatar.jpg
+  logo: https://hanshansite-1307452666.cos.ap-shanghai.myqcloud.com/site-img/avatar.jpg
   # Site avatar
-  avatar: /images/avatar.jpg
+  avatar: https://hanshansite-1307452666.cos.ap-shanghai.myqcloud.com/site-img/avatar.jpg
 # IMAGE CONFIGURATION <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< end
 
 # COLORS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> start
